@@ -1,0 +1,24 @@
+{
+ "size": 512,
+ "span_m": 16000.0,
+ "cell_m": 31.25,
+ "hmin": 50.0,
+ "hmax": 853.2,
+ "west": 127.56956,
+ "east": 127.75108,
+ "south": 37.56993,
+ "north": 37.71383,
+ "center": {
+  "lat": 37.64188,
+  "lon": 127.66032,
+  "name": "대곡리"
+ },
+ "dem_source": "Copernicus DEM GLO-30 (ESA)",
+ "landcover_source": "ESA WorldCover 10 m 2021 v200",
+ "sat": {
+  "scene": "S2B_52SCG_20261008_0_L2A",
+  "date": "2026-10-08",
+  "cloud": 0.003092,
+  "source": "Copernicus Sentinel-2 L2A (ESA)"
+ }
+}

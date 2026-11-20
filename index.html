@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>대곡리 지형 분석 · 가상 침투 시나리오</title>
+<meta name="description" content="공개 표고·위성 자료로 계산한 가시권, 예상 침투로, 화력 우선순위를 3D 지형 위에 보여주는 데모">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b0e11'/%3E%3Cpath d='M4 23l7-10 5 6 4-5 8 9z' fill='none' stroke='%23e8ecef' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./assets/css/pretendard.css">
+<link rel="stylesheet" href="./assets/css/app.css">
+<script type="importmap">{ "imports": { "three": "./assets/vendor/three.min.js" } }</script>
+</head>
+<body>
+
+<canvas id="gl" aria-label="3D 지형 지도"></canvas>
+<div id="marks" aria-hidden="true"></div>
+
+<section class="panel left" id="panelL">
+  <button class="fold" data-fold="panelL" aria-label="설정 패널 접기">‹</button>
+  <div class="scroll">
+    <header class="brand">
+      <p class="eyebrow">TERRAIN ANALYSIS · DEMO</p>
+      <h1>대곡리 지형 분석</h1>
+      <p class="sub">가상 침투 시나리오 — 공개 표고·위성 자료만으로 계산한 가시권, 예상 침투로, 화력 우선순위</p>
+    </header>
+
+    <div class="group">
+      <h2>시나리오</h2>
+      <label class="row">적 진입 방향</label>
+      <div class="seg" id="edge">
+        <button data-v="N" class="on">북</button><button data-v="E">동</button><button data-v="S">남</button><button data-v="W">서</button>
+      </div>
+      <label class="row" for="stealth">적 은폐 우선도 <output id="stealthOut">70%</output></label>
+      <input type="range" id="stealth" min="0" max="100" value="70">
+      <p class="hint">낮추면 빠른 길을, 높이면 숲과 관측 사각을 따라가는 길을 고릅니다.</p>
+    </div>
+
+    <div class="group">
+      <h2>배치 도구</h2>
+      <div class="tools" id="tools">
+        <button data-v="look" class="on"><b>탐색</b><span>회전·확대</span></button>
+        <button data-v="post"><b>관측소</b><span>클릭으로 배치</span></button>
+        <button data-v="enemy"><b>적 출발점</b><span>클릭으로 지정</span></button>
+        <button data-v="objective"><b>목표</b><span>클릭으로 이동</span></button>
+      </div>
+      <div class="inline">
+        <button class="ghost" id="resetPosts">관측소 자동 배치</button>
+        <button class="ghost" id="resetStarts">진입점 자동 선정</button>
+      </div>
+    </div>
+
+    <div class="group">
+      <h2>레이어</h2>
+      <div class="checks" id="layers">
+        <label><input type="checkbox" data-v="sat" checked><span>위성영상</span></label>
+        <label><input type="checkbox" data-v="contour" checked><span>등고선 20 m</span></label>
+        <label><input type="checkbox" data-v="vis" checked><span>관측소 가시권</span></label>
+        <label><input type="checkbox" data-v="corr" checked><span>침투 회랑</span></label>
+        <label><input type="checkbox" data-v="iso"><span>목표 도달시간 30분선</span></label>
+        <label><input type="checkbox" data-v="grid"><span>1 km 격자</span></label>
+        <label><input type="checkbox" data-v="hover" checked><span>커서 가시권 미리보기</span></label>
+        <label><input type="checkbox" data-v="places" checked><span>지명</span></label>
+      </div>
+    </div>
+
+    <details class="group notes">
+      <summary>가정과 한계</summary>
+      <ul>
+        <li>가상 시나리오입니다. 실제 부대·시설·작전 정보는 들어 있지 않습니다.</li>
+        <li>표고는 30 m 격자(Copernicus DEM)이며 분석은 62.5 m 격자로 계산합니다. 폭 60~90 m보다 좁은 지형은 반영되지 않습니다.</li>
+        <li>이동 시간은 Tobler 보행 함수와 토지피복 계수로 추정한 도보 기준입니다. 도로, 교량, 장애물은 반영하지 않았습니다.</li>
+        <li>가시권은 관측 높이 2 m, 반경 6 km 기준이며 수목에 의한 차폐와 지구 곡률은 반영하지 않았습니다.</li>
+        <li>침투로 가능성은 비용 차이로 환산한 상대값이며 검증된 확률이 아닙니다.</li>
+      </ul>
+      <p class="src" id="src"></p>
+    </details>
+  </div>
+</section>
+
+<section class="panel right" id="panelR">
+  <button class="fold" data-fold="panelR" aria-label="결과 패널 접기">›</button>
+  <div class="scroll">
+    <div class="group" id="logWrap" hidden>
+      <h2>진행 기록</h2>
+      <ol class="log" id="log"></ol>
+    </div>
+    <div class="group">
+      <h2>판단 요약</h2>
+      <p class="brief" id="brief"></p>
+    </div>
+    <div class="group">
+      <h2>예상 침투로 <small id="stat"></small></h2>
+      <ol class="routes" id="routes"></ol>
+    </div>
+    <div class="group">
+      <h2>아군 화력 계획 후보</h2>
+      <p class="hint">침투로가 좁아지거나 합쳐지는 지점입니다. 목표에서 0.7~5 km 구간에서 고릅니다.</p>
+      <ol class="prio trp" id="trps"></ol>
+    </div>
+    <div class="group">
+      <h2>적이 먼저 제압하려 할 지점</h2>
+      <p class="hint">관측소가 없을 때의 침투로를 가장 많이 감시하는 관측소 순서입니다.</p>
+      <ol class="prio tgt" id="tgts"></ol>
+    </div>
+  </div>
+</section>
+
+<div class="playbar" id="playbar">
+  <button id="play" aria-label="시나리오 재생">▶</button>
+  <div class="time"><b id="clock">H+00:00</b><span id="clockEnd"></span></div>
+  <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="시나리오 시간">
+  <button id="stop" class="ghost" aria-label="재생 종료">전체 보기</button>
+</div>
+
+<div class="hud" id="hud"><span id="hudMgrs">—</span><span id="hudLL"></span><span id="hudEl"></span></div>
+<div class="compass" id="compass" title="북쪽"><i></i><b>N</b></div>
+<div class="toast" id="toast" hidden></div>
+
+<div id="boot"><div><p class="eyebrow">TERRAIN ANALYSIS</p><p id="bootMsg">지형 자료를 불러오는 중입니다</p><div class="bar"><i id="bootBar"></i></div></div></div>
+<noscript><p style="padding:24px;color:#fff">이 페이지는 JavaScript와 WebGL이 필요합니다.</p></noscript>
+
+<script type="module" src="./assets/js/app.js"></script>
+</body>
+</html>

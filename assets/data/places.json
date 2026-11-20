@@ -1,0 +1,156 @@
+[
+ {
+  "name": "대곡리",
+  "lat": 37.64188,
+  "lon": 127.66032,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "반곡리",
+  "lat": 37.69288,
+  "lon": 127.66719,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "팔봉리",
+  "lat": 37.66967,
+  "lon": 127.70637,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "모곡리",
+  "lat": 37.68976,
+  "lon": 127.58848,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "길곡리",
+  "lat": 37.65392,
+  "lon": 127.572,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "굴업리",
+  "lat": 37.62742,
+  "lon": 127.69143,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "두미리",
+  "lat": 37.66506,
+  "lon": 127.66858,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "어유포리",
+  "lat": 37.71184,
+  "lon": 127.69549,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "중방대리",
+  "lat": 37.65695,
+  "lon": 127.61706,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "개야리",
+  "lat": 37.68016,
+  "lon": 127.63393,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "팔봉산(홍천)",
+  "lat": 37.69588,
+  "lon": 127.69712,
+  "kind": "peak",
+  "cat": "natural"
+ },
+ {
+  "name": "종자산",
+  "lat": 37.66216,
+  "lon": 127.63397,
+  "kind": "peak",
+  "cat": "natural"
+ },
+ {
+  "name": "매봉산",
+  "lat": 37.6317,
+  "lon": 127.7006,
+  "kind": "peak",
+  "cat": "natural"
+ },
+ {
+  "name": "쇠뿔봉",
+  "lat": 37.64767,
+  "lon": 127.71536,
+  "kind": "peak",
+  "cat": "natural"
+ },
+ {
+  "name": "홍천강",
+  "lat": 37.68208,
+  "lon": 127.73112,
+  "kind": "river",
+  "cat": "waterway"
+ },
+ {
+  "name": "명성리",
+  "lat": 37.61402,
+  "lon": 127.65995,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "석산리",
+  "lat": 37.63281,
+  "lon": 127.59841,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "산음리",
+  "lat": 37.59723,
+  "lon": 127.59401,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "향소리",
+  "lat": 37.57032,
+  "lon": 127.64359,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "비발디파크",
+  "lat": 37.64177,
+  "lon": 127.68747,
+  "kind": "winter_sports",
+  "cat": "landuse"
+ },
+ {
+  "name": "한덕리",
+  "lat": 37.69982,
+  "lon": 127.62408,
+  "kind": "village",
+  "cat": "place"
+ },
+ {
+  "name": "노일리",
+  "lat": 37.68216,
+  "lon": 127.74303,
+  "kind": "village",
+  "cat": "place"
+ }
+]
